@@ -3,19 +3,36 @@ var side = 20;
 var gridSide = 22;
 var playWidth;
 var playHeight;
+var food;
+var constraintx;
+var constrainty;
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
 	s = new Snake();
 	frameRate(5);
+	
 	playWidth = windowWidth - gridSide;
 	playHeight = windowHeight - gridSide;
+	constraintx = Math.floor(playWidth / gridSide) * gridSide ;
+	constrainty = Math.floor(playHeight / gridSide) * gridSide ;
+
+	createFood();
 }
 
 function draw() {
 	background(51);
 	s.update();
 	s.show();
+
+	fill(255,0,100);
+	rect(food.x,food.y,side,side);
+}
+
+function createFood() {
+	x = Math.floor(random(constraintx + 1) / gridSide) * gridSide;
+	y = Math.floor(random(constrainty + 1) / gridSide) * gridSide;
+	food = createVector(x + 2, y + 2);
 }
 
 function keyPressed() {
@@ -38,13 +55,14 @@ function Snake() {
 	this.speedy = 0;
 
 	this.show = function () {
+		fill(255); 
 		rect(this.x, this.y, side, side);
 	}
 
 	this.update = function () {
-		this.x = ((this.x + playWidth + (this.speedx * gridSide)) % playWidth);
+		this.x = ((this.x + constraintx + (this.speedx * gridSide)) % constraintx);
+		this.y = ((this.y + constrainty + (this.speedy * gridSide)) % constrainty);
 		console.log(this.x);
-		this.y = ((this.y + playHeight + (this.speedy * gridSide)) % playHeight);
 	}
 
 	this.turn = function(dirx, diry) {

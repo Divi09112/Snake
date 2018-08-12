@@ -32,8 +32,16 @@ function draw() {
 
 function createFood() {
 	x = Math.floor(random(constraintx + 1) / gridSide) * gridSide;
-	y = Math.floor(random(constrainty + 1) / gridSide) * gridSide;
+	y = Math.floor(random(constrainty) / gridSide) * gridSide;
 	food = createVector(x + 2, y + 2);
+
+	for (i = 0; i<s.length; i++){
+		d = dist(x, y, s.tail[i].x, s.tail[i].y);
+
+		if ( d === 0 ){
+			createFood();
+		}
+	}
 }
 
 function keyPressed() {

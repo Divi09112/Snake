@@ -59,9 +59,10 @@ function Snake() {
 
 	this.show = function () {
 		fill(255);
-
+		
 		tmp = this.tail;
 		tmp.push(createVector(this.x,this.y));
+		this.die();
 
 		for(i=0; i<this.length; i++) {
 			rect(tmp[i].x, tmp[i].y, side, side);
@@ -84,6 +85,16 @@ function Snake() {
 		}
 	}
 
+	this.die = function() {
+		for ( i = 0; i < this.length; i++){
+			d = dist(this.x, this.y, this.tail[i].x, this.tail[i].y);
+
+			if (d === 0) {
+				this.length = 0;
+				this.tail = [createVector(this.x, this.y)]
+			}
+		}
+	}
 
 	this.eat = function() {
 		d = dist(this.x, this.y, food.x, food.y)

@@ -23,6 +23,7 @@ function setup() {
 function draw() {
 	background(51);
 	s.update();
+	s.eat();
 	s.show();
 
 	fill(255,0,100);
@@ -53,16 +54,25 @@ function Snake() {
 	this.side = side;
 	this.speedx = 1;
 	this.speedy = 0;
+	this.length = 1;
+	this.tail = [createVector(this.x, this.y)];
 
 	this.show = function () {
-		fill(255); 
+		fill(255);
+
+		tmp = this.tail;
+		tmp.push(createVector(this.x,this.y));
+
+		for(i=0; i<this.length; i++) {
+			rect(tmp[i].x, tmp[i].y, side, side);
+		}
+
 		rect(this.x, this.y, side, side);
 	}
 
 	this.update = function () {
 		this.x = ((this.x + constraintx + (this.speedx * gridSide)) % constraintx);
 		this.y = ((this.y + constrainty + (this.speedy * gridSide)) % constrainty);
-		console.log(this.x);
 	}
 
 	this.turn = function(dirx, diry) {
@@ -71,6 +81,17 @@ function Snake() {
 		}
 		if (this.speedy !== -diry){
 			this.speedy = diry;
+		}
+	}
+
+
+	this.eat = function() {
+		d = dist(this.x, this.y, food.x, food.y)
+		if (d === 0){
+			this.length++;
+			createFood();
+		} else {
+			this.tail.shift();
 		}
 	}
 }
